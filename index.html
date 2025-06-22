@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arizona Fencing Division Competition Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Using a more specific selector to override potential tailwind conflicts if any */
+        .chart-wrapper canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* --- Print Styles for PDF Generation --- */
+        @media print {
+            /* Force background colors and images to print */
+            body {
+                -webkit-print-color-adjust: exact; /* Chrome, Safari, Edge */
+                print-color-adjust: exact; /* Firefox */
+            }
+
+            /* Class to force an element to start on a new page */
+            .page-break {
+                page-break-before: always;
+            }
+
+            /* Class to prevent an element from breaking across pages */
+            .no-break {
+                page-break-inside: avoid;
+            }
+            
+            /* General element adjustments for printing */
+            h2 {
+               page-break-after: avoid; /* Prevent page breaks right after a heading */
+            }
+
+            /* Remove shadows and transforms for cleaner print output */
+            .stat-card, .bg-white, .rounded-xl, .shadow-xl, .shadow-md, .rounded-2xl, .rounded-lg {
+                box-shadow: none !important;
+            }
+            .stat-card {
+                transform: none !important;
+            }
+
+            /* Ensure the main container doesn't have restrictive sizing in print */
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+             .bg-white {
+                padding: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10">
+
+            <!-- PAGE 1: Title and Overview -->
+            <section class="no-break">
+                <!-- Header -->
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Arizona Fencing Division Competition Report</h1>
+                    <p class="mt-2 text-lg text-gray-500">Analysis of Tournament Participation Data from 2024-2025 Season</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Competition Participation Overview</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="stat-card bg-blue-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">1,596</h3>
+                        <p class="mt-1 text-blue-100">Total Competition Instances</p>
+                    </div>
+                    <div class="stat-card bg-red-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">398</h3>
+                        <p class="mt-1 text-red-100">Unique Fencers</p>
+                    </div>
+                    <div class="stat-card bg-green-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">133</h3>
+                        <p class="mt-1 text-green-100">Total Events</p>
+                    </div>
+                    <div class="stat-card bg-yellow-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">4</h3>
+                        <p class="mt-1 text-yellow-100">Avg Events per Fencer</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: Participation Pie Charts -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Arizona vs Out-of-State/Unattached Participation</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="participationPieChart"></canvas></div>
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="uniqueFencerPieChart"></canvas></div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: Attendance Distribution -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Competition Attendance Distribution</h2>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-12 no-break">
+                    <div class="chart-wrapper h-96 max-w-5xl mx-auto"><canvas id="attendanceChart"></canvas></div>
+                </div>
+            </section>
+
+            <!-- PAGE 4: Ratings by Weapon -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Arizona Fencer Ratings by Weapon</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="epeeRatingsChart"></canvas></div>
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="foilRatingsChart"></canvas></div>
+                </div>
+                 <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-12 max-w-2xl mx-auto no-break">
+                    <div class="chart-wrapper h-96"><canvas id="saberRatingsChart"></canvas></div>
+                </div>
+            </section>
+
+            <!-- PAGE 5: Weapon and Gender Distribution -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Weapon Distribution</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                     <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="weaponInstancesChart"></canvas></div>
+                     <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="weaponFencersChart"></canvas></div>
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Gender Category Distribution</h2>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-12 no-break">
+                    <div class="chart-wrapper h-96 max-w-xl mx-auto"><canvas id="genderChart"></canvas></div>
+                </div>
+            </section>
+            
+            <!-- PAGE 6: Rating Achievements -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Rating Achievements</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                     <div class="stat-card bg-purple-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">34</h3>
+                        <p class="mt-1 text-purple-100">New Ratings Earned</p>
+                    </div>
+                    <div class="stat-card bg-teal-500 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 no-break">
+                        <h3 class="text-4xl font-extrabold">65</h3>
+                        <p class="mt-1 text-teal-100">Ratings Renewed</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="newRatingsChart"></canvas></div>
+                    <div class="chart-wrapper bg-gray-50 p-6 rounded-xl shadow-md h-96 no-break"><canvas id="renewedRatingsChart"></canvas></div>
+                </div>
+            </section>
+
+            <!-- PAGE 7: Club & Weapon Details -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Club Participation Summary</h2>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-12 no-break">
+                    <div class="chart-wrapper h-[500px]"><canvas id="clubChart"></canvas></div>
+                </div>
+
+                 <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6 page-break">Weapon Specialization</h2>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-12 max-w-md mx-auto no-break">
+                    <div class="chart-wrapper h-96"><canvas id="weaponSpecChart"></canvas></div>
+                </div>
+            </section>
+
+            <!-- PAGE 8: Club Table and Key Findings -->
+            <section class="page-break no-break">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Arizona Club Participation Details</h2>
+                <div class="overflow-x-auto rounded-lg shadow-md mb-12 no-break">
+                     <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-white uppercase bg-blue-600">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Club Name</th>
+                                <th scope="col" class="px-6 py-3">Total Instances</th>
+                                <th scope="col" class="px-6 py-3">Epee</th>
+                                <th scope="col" class="px-6 py-3">Foil</th>
+                                <th scope="col" class="px-6 py-3">Saber</th>
+                                <th scope="col" class="px-6 py-3">Youth</th>
+                                <th scope="col" class="px-6 py-3">Senior</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clubTableBody">
+                            <!-- Rows will be injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-500 pb-2 mb-6">Key Findings</h2>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-6 rounded-r-lg mb-12 no-break">
+                    <ul class="space-y-3">
+                        <li><strong>Strong Local Engagement:</strong> 311 unique Arizona fencers (78.1%) participated, averaging 4 events each.</li>
+                        <li><strong>Arizona Dominance:</strong> Arizona clubs account for 86.4% of all competition instances (1,379), showing exceptional local strength.</li>
+                        <li><strong>Epee Majority:</strong> Epee is the most popular weapon, with 64.3% of fencers and 66.4% of all instances.</li>
+                        <li><strong>Mixed Events Popular:</strong> Mixed gender events constitute 69.4% of all participation (1,107 instances).</li>
+                        <li><strong>Active Women's Scene:</strong> Women's-only events represent a solid 16.7% of all competition instances.</li>
+                        <li><strong>High Specialization:</strong> 89.4% of fencers focus on a single weapon, while 10.6% compete in multiple.</li>
+                        <li><strong>Rating Success:</strong> 99 total ratings were earned or renewed (34 new, 65 renewed).</li>
+                        <li><strong>Steady Competition:</strong> Arizona hosts an average of 2.1 competitions per month with ~160 instances monthly.</li>
+                        <li><strong>Good Retention:</strong> 74.1% of fencers competed in multiple events, indicating a healthy retention rate for the season.</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center mt-12 no-break">
+                    <p class="text-sm text-gray-500 italic"><strong>Data Source:</strong> This report is based on AskFRED competition data and reflects tournament participation only. It does not represent overall USA Fencing membership statistics for the Arizona Division.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA --- //
+            const participationData = { arizona: 1379, outOfState: 217 };
+            const uniqueFencerData = { arizona: 311, outOfState: 87 };
+            const weaponInstanceData = { labels: ['Epee', 'Foil', 'Saber'], values: [1059, 291, 246] };
+            const weaponFencerData = { labels: ['Epee', 'Foil', 'Saber'], values: [256, 100, 87] };
+            const attendanceData = { labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '22+'], values: [103, 95, 42, 31, 33, 16, 16, 17, 14, 7, 3, 2, 5, 4, 4, 3, 1, 2] };
+            const clubData = {
+                'Still Point Fencing': { total: 331, epee: 240, foil: 89, saber: 2, youth: 33, senior: 298 },
+                'Phoenix Falcons FC': { total: 233, epee: 190, foil: 41, saber: 2, youth: 63, senior: 168 },
+                'Phoenix Fencing Academy': { total: 209, epee: 1, foil: 0, saber: 208, youth: 87, senior: 122 },
+                'EWA Fencing LLC': { total: 194, epee: 186, foil: 8, saber: 0, youth: 96, senior: 97 },
+                'German Fencing Academy': { total: 190, epee: 156, foil: 33, saber: 1, youth: 141, senior: 48 },
+                'Southwest Fencing Club': { total: 98, epee: 93, foil: 1, saber: 4, youth: 11, senior: 87 },
+                'AZ United Fencing Club': { total: 45, epee: 1, foil: 43, saber: 1, youth: 2, senior: 43 },
+                'Arizona State University FC': { total: 43, epee: 12, foil: 21, saber: 10, youth: 0, senior: 43 },
+                'Windy Hill Fencing Center': { total: 36, epee: 36, foil: 0, saber: 0, youth: 1, senior: 35 }
+            };
+            const ratingData = {
+                new: { A: 1, B: 1, C: 2, D: 3, E: 28 },
+                renewed: { A: 1, B: 7, C: 20, D: 29, E: 8 }
+            };
+            const epeeRatingsData = [4, 13, 12, 16, 22, 131];
+            const foilRatingsData = [0, 1, 5, 7, 7, 51];
+            const saberRatingsData = [2, 3, 8, 3, 2, 60];
+            const ratingLabels = ['A', 'B', 'C', 'D', 'E', 'Unrated'];
+
+            // --- CHART DEFAULTS --- //
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.plugins.legend.position = 'bottom';
+            Chart.defaults.plugins.title.display = true;
+            Chart.defaults.plugins.title.font = { size: 16 };
+            Chart.defaults.responsive = true;
+            Chart.defaults.maintainAspectRatio = false;
+
+            // --- CHART COLORS --- //
+            const chartColors = {
+                pie: ['#3b82f6', '#ef4444', '#22c55e', '#f59e0b', '#8b5cf6', '#14b8a6'],
+                rating: ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#6b7280'],
+                weapon: ['#3b82f6', '#ef4444', '#f59e0b'],
+                gender: ['#8b5cf6', '#3b82f6'],
+                ratings: { new: '#8b5cf6', renewed: '#14b8a6' },
+                bar: '#3b82f6',
+            };
+
+            // --- CREATE CHARTS --- //
+
+            // Participation Pie Chart
+            new Chart(document.getElementById('participationPieChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Arizona Clubs', 'Out-of-State/Unattached'],
+                    datasets: [{ data: [participationData.arizona, participationData.outOfState], backgroundColor: chartColors.pie, borderWidth: 3, borderColor: '#f9fafb'}]
+                },
+                options: { plugins: { title: { text: 'Competition Instances (1,596 total)' } } }
+            });
+
+            // Unique Fencer Pie Chart
+            new Chart(document.getElementById('uniqueFencerPieChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Arizona Fencers', 'Out-of-State/Unattached'],
+                    datasets: [{ data: [uniqueFencerData.arizona, uniqueFencerData.outOfState], backgroundColor: chartColors.pie, borderWidth: 3, borderColor: '#f9fafb' }]
+                },
+                options: { plugins: { title: { text: 'Unique Fencers (398 total)' } } }
+            });
+
+            // Attendance Distribution Chart
+            new Chart(document.getElementById('attendanceChart'), {
+                type: 'bar',
+                data: {
+                    labels: attendanceData.labels,
+                    datasets: [{ label: 'Number of Fencers', data: attendanceData.values, backgroundColor: chartColors.bar }]
+                },
+                options: {
+                    plugins: { legend: { display: false }, title: { text: 'Fencer Competition Attendance Distribution' } },
+                    scales: {
+                        x: { title: { display: true, text: 'Number of Events Attended' } },
+                        y: { beginAtZero: true, title: { display: true, text: 'Number of Fencers' } }
+                    }
+                }
+            });
+
+            // Ratings Charts
+            new Chart(document.getElementById('epeeRatingsChart'), {
+                type: 'doughnut',
+                data: { labels: ratingLabels, datasets: [{ data: epeeRatingsData, backgroundColor: chartColors.rating, borderWidth: 3, borderColor: '#f9fafb' }] },
+                options: { plugins: { title: { text: 'Epee Ratings (198 AZ Fencers)' } } }
+            });
+            new Chart(document.getElementById('foilRatingsChart'), {
+                type: 'doughnut',
+                data: { labels: ratingLabels, datasets: [{ data: foilRatingsData, backgroundColor: chartColors.rating, borderWidth: 3, borderColor: '#f9fafb' }] },
+                options: { plugins: { title: { text: 'Foil Ratings (71 AZ Fencers)' } } }
+            });
+            new Chart(document.getElementById('saberRatingsChart'), {
+                type: 'doughnut',
+                data: { labels: ratingLabels, datasets: [{ data: saberRatingsData, backgroundColor: chartColors.rating, borderWidth: 3, borderColor: '#f9fafb' }] },
+                options: { plugins: { title: { text: 'Saber Ratings (78 AZ Fencers)' } } }
+            });
+            
+            // Weapon Distribution Charts
+             new Chart(document.getElementById('weaponInstancesChart'), {
+                type: 'bar',
+                data: { labels: weaponInstanceData.labels, datasets: [{ label: 'Competition Instances', data: weaponInstanceData.values, backgroundColor: chartColors.weapon }] },
+                options: { plugins: { legend: { display: false }, title: { text: 'Instances by Weapon' }}, scales: { y: { beginAtZero: true }} }
+            });
+             new Chart(document.getElementById('weaponFencersChart'), {
+                type: 'bar',
+                data: { labels: weaponFencerData.labels, datasets: [{ label: 'Unique Fencers', data: weaponFencerData.values, backgroundColor: chartColors.weapon }] },
+                options: { plugins: { legend: { display: false }, title: { text: 'Fencers by Weapon' }}, scales: { y: { beginAtZero: true }} }
+            });
+
+            // Gender Chart
+            new Chart(document.getElementById('genderChart'), {
+                type: 'bar',
+                data: { labels: ["Women's Events", 'All Other Events'], datasets: [{ label: 'Competition Instances', data: [266, 1330], backgroundColor: chartColors.gender }] },
+                options: { plugins: { legend: { display: false }, title: { text: 'Instances by Gender Category' }}, scales: { y: { beginAtZero: true }} }
+            });
+            
+            // Rating Achievement Charts
+             new Chart(document.getElementById('newRatingsChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(ratingData.new), datasets: [{ label: 'New Ratings', data: Object.values(ratingData.new), backgroundColor: chartColors.ratings.new }] },
+                options: { plugins: { legend: { display: false }, title: { text: 'New Ratings Earned' } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 5 } } } }
+            });
+             new Chart(document.getElementById('renewedRatingsChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(ratingData.renewed), datasets: [{ label: 'Renewed Ratings', data: Object.values(ratingData.renewed), backgroundColor: chartColors.ratings.renewed }] },
+                options: { plugins: { legend: { display: false }, title: { text: 'Renewed Ratings' } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 5 } } } }
+            });
+
+            // Club Chart
+            new Chart(document.getElementById('clubChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(clubData), datasets: [{ label: 'Total Instances', data: Object.values(clubData).map(c => c.total), backgroundColor: chartColors.bar }] },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false }, title: { text: 'Arizona Clubs by Competition Instances' } },
+                    scales: { x: { beginAtZero: true, title: { display: true, text: 'Number of Instances' } } }
+                }
+            });
+
+            // Weapon Specialization Chart
+            new Chart(document.getElementById('weaponSpecChart'), {
+                type: 'doughnut',
+                data: { labels: ['Single Weapon', 'Multi-Weapon'], datasets: [{ data: [356, 42], backgroundColor: chartColors.pie, borderWidth: 3, borderColor: '#f9fafb' }] },
+                options: { plugins: { title: { text: 'Fencer Weapon Specialization' } } }
+            });
+
+            // Populate Club Table
+            const tableBody = document.getElementById('clubTableBody');
+            Object.entries(clubData).forEach(([clubName, data], index) => {
+                const row = tableBody.insertRow();
+                const bgColorClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                row.className = `${bgColorClass} border-b`;
+                row.innerHTML = `
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${clubName}</th>
+                    <td class="px-6 py-4">${data.total}</td>
+                    <td class="px-6 py-4">${data.epee}</td>
+                    <td class="px-6 py-4">${data.foil}</td>
+                    <td class="px-6 py-4">${data.saber}</td>
+                    <td class="px-6 py-4">${data.youth}</td>
+                    <td class="px-6 py-4">${data.senior}</td>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
